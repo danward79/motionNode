@@ -15,8 +15,8 @@
 #include <avr/sleep.h>
 #include <util/atomic.h>
 
-#define SERIAL  1   // set to 1 to also report readings on the serial port
-#define DEBUG   1   // set to 1 to display each loop() run and PIR trigger
+//#define SERIAL  1   // set to 1 to also report readings on the serial port
+//#define DEBUG   1   // set to 1 to display each loop() run and PIR trigger
 
 #define LDR_PORT    4   // defined if LDR is connected to a port's AIO pin
 #define PIR_PORT    4   // defined if PIR is connected to a port's DIO pin
