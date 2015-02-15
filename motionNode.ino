@@ -18,8 +18,8 @@
 //#define SERIAL  1   // set to 1 to also report readings on the serial port
 //#define DEBUG   1   // set to 1 to display each loop() run and PIR trigger
 
-#define LDR_PORT    4   // defined if LDR is connected to a port's AIO pin
-#define PIR_PORT    4   // defined if PIR is connected to a port's DIO pin
+#define LDR_PORT    7  //4 // defined if LDR is connected to a port's AIO pin
+#define PIR_PORT    10 //4 // defined if PIR is connected to a port's DIO pin
 
 #define MEASURE_PERIOD  600 // how often to measure, in tenths of seconds
 #define RETRY_PERIOD    5  // how soon to retry if ACK didn't come in
@@ -113,7 +113,7 @@ Port ldr (LDR_PORT);
 PIR pir (PIR_PORT);
 
 // the PIR signal comes in via a pin-change interrupt
-ISR(PCINT2_vect) { pir.poll(); }
+ISR(PCINT0_vect) { pir.poll(); }
 
 // has to be defined because we're using the watchdog for low-power waiting
 ISR(WDT_vect) { Sleepy::watchdogEvent(); }
@@ -225,13 +225,17 @@ void setup () {
         myNodeID = rf12_config(0); // don't report info on the serial port
     #endif
 
+    rf12_initialize(19, RF12_433MHZ , 212);
     rf12_sleep(RF12_SLEEP); // power down
 
 
     pir.digiWrite(PIR_PULLUP);
 
-    bitSet(PCMSK2, PIR_PORT + 3);
-    bitSet(PCICR, PCIE2);
+
+    //ATTINY84
+    bitSet(PCMSK0, PCINT0); //TODO: PIR_PORT + 3);
+    bitSet(GIMSK, PCIE0);
+
 
     reportCount = REPORT_EVERY;     // report right away for easy debugging
     scheduler.timer(MEASURE, 0);    // start the measurement loop going
